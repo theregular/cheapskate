@@ -1,6 +1,6 @@
 # Cheapskate Grocery Prices App
 
-## Stack
+### Stack
 
 #### Frontend
 - React Native (Expo)
