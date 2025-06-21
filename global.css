@@ -8,7 +8,7 @@
     --theme-2: 0, 0%, 94%;
     --theme-3: 25, 84%, 63%;
     --theme-4: 12, 84%, 54%;
-    --background: 25, 84%, 63%;
+    --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -31,12 +31,12 @@
 
   .dark:root {
     --background: 240 10% 3.9%;
-    --foreground: 25, 84%, 63%;
+    --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 25, 84%, 63%;
+    --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
