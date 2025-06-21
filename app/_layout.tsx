@@ -10,6 +10,7 @@ import { useColorScheme } from '~/lib/useColorScheme';
 import { PortalHost } from '@rn-primitives/portal';
 import { ThemeToggle } from '~/components/ThemeToggle';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
+import { Text } from "~/components/ui/text";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -23,7 +24,7 @@ const DARK_THEME: Theme = {
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router';
+} from "expo-router";
 
 const usePlatformSpecificSetup = Platform.select({
   web: useSetWebBackgroundClassName,
@@ -37,13 +38,19 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
       <Stack>
         <Stack.Screen
-          name='index'
+          name="(tabs)"
           options={{
-            title: 'Starter Base',
-            headerRight: () => <ThemeToggle />,
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(modals)"
+          options={{
+            headerShown: false,
+            presentation: "modal",
           }}
         />
       </Stack>

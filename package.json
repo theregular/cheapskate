@@ -1,5 +1,5 @@
 {
-  "name": "rnr-ts",
+  "name": "cheapskate",
   "main": "index.js",
   "version": "1.0.0",
   "scripts": {
@@ -8,11 +8,13 @@
     "dev:android": "expo start -c --android",
     "android": "expo start -c --android",
     "ios": "expo start -c --ios",
+    "ios-sim": "npx expo run:ios",
     "web": "expo start -c --web",
     "clean": "rm -rf .expo node_modules",
     "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css"
   },
   "dependencies": {
+    "@radix-ui/react-progress": "^1.1.7",
     "@react-navigation/native": "^7.0.0",
     "@rn-primitives/avatar": "~1.2.0",
     "@rn-primitives/portal": "~1.3.0",
@@ -22,6 +24,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "expo": "^53.0.9",
+    "expo-dev-client": "~5.1.8",
     "expo-linking": "~7.1.5",
     "expo-navigation-bar": "~4.2.4",
     "expo-router": "~5.0.7",
@@ -32,6 +35,7 @@
     "nativewind": "^4.1.23",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.58.1",
     "react-native": "0.79.2",
     "react-native-reanimated": "~3.17.5",
     "react-native-safe-area-context": "5.4.0",

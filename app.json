@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rnr-ts",
-    "slug": "rnr-ts",
+    "name": "cheapskate",
+    "slug": "cheapskate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.cheapskate"
     },
     "android": {
       "adaptiveIcon": {
