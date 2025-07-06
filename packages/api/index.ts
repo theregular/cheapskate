@@ -1,7 +1,15 @@
 import { Hono } from "hono";
+import type { JwtVariables } from "hono/jwt";
 import { serve } from "@hono/node-server";
+import auth from "./routes/auth";
+import protectedRoute from "./routes/protected";
 
-const app = new Hono();
+type Variables = JwtVariables;
+
+const app = new Hono<{ Variables: Variables }>();
+
+app.route('/auth', auth);            // POST /auth/login
+app.route('/api', protectedRoute);     // GET /api/profile
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");

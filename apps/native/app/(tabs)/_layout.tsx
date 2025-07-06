@@ -1,8 +1,6 @@
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
-import { Home } from "lucide-react-native";
-import { Text } from "~/components/ui/text";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { ToggleSettings } from "~/components/Settings";
 

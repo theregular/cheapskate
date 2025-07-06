@@ -1,16 +1,18 @@
 import '~/global.css';
 
 import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import * as React from 'react';
-import { Appearance, Platform, View } from 'react-native';
-import { NAV_THEME } from '~/lib/constants';
-import { useColorScheme } from '~/lib/useColorScheme';
-import { PortalHost } from '@rn-primitives/portal';
-import { ThemeToggle } from '~/components/ThemeToggle';
-import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
+import { Redirect, Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import * as React from "react";
+import { Appearance, Platform, View } from "react-native";
+import { NAV_THEME } from "~/lib/constants";
+import { useColorScheme } from "~/lib/useColorScheme";
+import { PortalHost } from "@rn-primitives/portal";
+import { ThemeToggle } from "~/components/ThemeToggle";
+import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { Text } from "~/components/ui/text";
+import { useAuth } from "~/components/auth/useAuth";
+import { SessionProvider, useSession } from "~/components/auth/SessionContext";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -37,9 +39,21 @@ export default function RootLayout() {
   const { isDarkColorScheme } = useColorScheme();
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack>
+    <SessionProvider>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <RootNavigator />
+        <PortalHost />
+      </ThemeProvider>
+    </SessionProvider>
+  );
+}
+
+function RootNavigator() {
+  const { session } = useSession();
+  return (
+    <Stack>
+      <Stack.Protected guard={!!session}>
         <Stack.Screen
           name="(tabs)"
           options={{
@@ -53,9 +67,16 @@ export default function RootLayout() {
             presentation: "modal",
           }}
         />
-      </Stack>
-      <PortalHost />
-    </ThemeProvider>
+      </Stack.Protected>
+      <Stack.Protected guard={!session}>
+        <Stack.Screen
+          name="login"
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Protected>
+    </Stack>
   );
 }
 
