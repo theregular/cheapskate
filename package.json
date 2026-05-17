@@ -7,9 +7,16 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "node scripts/run-workspaces-if-present.mjs lint",
-    "typecheck": "node scripts/run-workspaces-if-present.mjs typecheck",
-    "test": "node scripts/run-workspaces-if-present.mjs test",
+    "start": "npm --workspace apps/mobile run start",
+    "mobile:start": "npm --workspace apps/mobile run start",
+    "mobile:android": "npm --workspace apps/mobile run android",
+    "mobile:ios": "npm --workspace apps/mobile run ios",
+    "mobile:iphone": "npm --workspace apps/mobile run iphone",
+    "mobile:web": "npm --workspace apps/mobile run web",
+    "mobile:reset-project": "npm --workspace apps/mobile run reset-project",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
     "supabase:start": "npx supabase start",
     "supabase:stop": "npx supabase stop",
     "supabase:status": "npx supabase status",
@@ -27,6 +34,8 @@
   },
   "version": "1.0.0",
   "devDependencies": {
+    "eslint": "^9.39.4",
+    "eslint-config-expo": "~55.0.1",
     "supabase": "^2.98.2"
   }
 }

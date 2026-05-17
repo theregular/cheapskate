@@ -1,2 +1,1 @@
-insert into public.smoke_tests (label)
-values ('database setup');
+-- Manual app smoke rows are created from an authenticated Supabase client.
