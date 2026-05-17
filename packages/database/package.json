@@ -1,0 +1,17 @@
+{
+  "name": "@cheapskate/database",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "db:types:local": "npx supabase gen types typescript --local --schema public > src/database.types.ts",
+    "db:types:remote": "npx supabase gen types typescript --project-id \"$SUPABASE_PROJECT_REF\" --schema public > src/database.types.ts"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2"
+  }
+}

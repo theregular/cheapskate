@@ -1,0 +1,32 @@
+{
+  "name": "cheapskate",
+  "private": true,
+  "packageManager": "npm@11.14.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "node scripts/run-workspaces-if-present.mjs lint",
+    "typecheck": "node scripts/run-workspaces-if-present.mjs typecheck",
+    "test": "node scripts/run-workspaces-if-present.mjs test",
+    "supabase:start": "npx supabase start",
+    "supabase:stop": "npx supabase stop",
+    "supabase:status": "npx supabase status",
+    "db:reset": "npx supabase db reset",
+    "db:push": "npx supabase db push",
+    "db:pull": "npx supabase db pull",
+    "db:types:local": "npm --workspace @cheapskate/database run db:types:local",
+    "db:types:remote": "npm --workspace @cheapskate/database run db:types:remote"
+  },
+  "dependencies": {
+    "expo": "~55.0.24",
+    "expo-dev-client": "~55.0.34",
+    "react": "19.2.0",
+    "react-native": "0.83.6"
+  },
+  "version": "1.0.0",
+  "devDependencies": {
+    "supabase": "^2.98.2"
+  }
+}
