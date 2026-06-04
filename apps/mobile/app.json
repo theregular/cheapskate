@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "cheapskate-build"
+      "bundleIdentifier": "com.bartch.cheapskate"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,6 +21,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
+      "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },

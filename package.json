@@ -36,6 +36,6 @@
   "devDependencies": {
     "eslint": "^9.39.4",
     "eslint-config-expo": "~55.0.1",
-    "supabase": "^2.98.2"
+    "supabase": "^2.102.0"
   }
 }
