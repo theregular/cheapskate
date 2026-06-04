@@ -1,16 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  type TextStyle,
-  View,
-} from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Text } from '@/components/ui/text';
 import { useTheme } from '@/hooks/use-theme';
 import { hasSupabaseEnv, supabase, supabaseUrl } from '@/lib/supabase';
 
@@ -32,23 +33,6 @@ export function SupabaseSmokePanel() {
   const [status, setStatus] = useState('Set Expo Supabase env vars, then sign in.');
   const [error, setError] = useState<string | null>(null);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
-
-  const inputStyle = useMemo<TextStyle>(
-    () => ({
-      color: theme.text,
-      borderColor: theme.backgroundSelected,
-      backgroundColor: theme.background,
-    }),
-    [theme]
-  );
-
-  const buttonStyle = useMemo(
-    () => [
-      styles.button,
-      { backgroundColor: theme.text, opacity: loadingAction || !hasSupabaseEnv ? 0.55 : 1 },
-    ],
-    [loadingAction, theme.text]
-  );
 
   const refreshRows = useCallback(async () => {
     if (!hasSupabaseEnv) {
@@ -183,149 +167,103 @@ export function SupabaseSmokePanel() {
   const disabled = Boolean(loadingAction) || !hasSupabaseEnv;
 
   return (
-    <ThemedView type="backgroundElement" style={styles.panel}>
-      <View style={styles.header}>
-        <View style={styles.headerText}>
-          <ThemedText type="smallBold">Local Supabase</ThemedText>
-          <ThemedText type="small" themeColor="textSecondary">
+    <Card className="w-full">
+      <CardHeader className="flex-row justify-between gap-4">
+        <View className="flex-1 gap-1">
+          <CardTitle>Local Supabase</CardTitle>
+          <CardDescription selectable>
             {hasSupabaseEnv ? supabaseUrl : 'Missing Expo public env vars'}
-          </ThemedText>
+          </CardDescription>
         </View>
         {loadingAction && <ActivityIndicator color={theme.text} />}
-      </View>
+      </CardHeader>
 
-      <View style={styles.fields}>
-        <TextInput
-          autoCapitalize="none"
-          autoCorrect={false}
-          editable={!loadingAction}
-          keyboardType="email-address"
-          onChangeText={setEmail}
-          placeholder="Email"
-          placeholderTextColor={theme.textSecondary}
-          style={[styles.input, inputStyle]}
-          value={email}
-        />
-        <TextInput
-          autoCapitalize="none"
-          editable={!loadingAction}
-          onChangeText={setPassword}
-          placeholder="Password"
-          placeholderTextColor={theme.textSecondary}
-          secureTextEntry
-          style={[styles.input, inputStyle]}
-          value={password}
-        />
-      </View>
+      <CardContent className="gap-4">
+        <View className="gap-2">
+          <Input
+            aria-label="Email"
+            autoCapitalize="none"
+            autoCorrect={false}
+            editable={!loadingAction}
+            keyboardType="email-address"
+            onChangeText={setEmail}
+            placeholder="Email"
+            value={email}
+          />
+          <Input
+            aria-label="Password"
+            autoCapitalize="none"
+            editable={!loadingAction}
+            onChangeText={setPassword}
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+          />
+        </View>
 
-      <View style={styles.actions}>
-        <Pressable disabled={disabled} onPress={signUp} style={buttonStyle}>
-          <ThemedText type="smallBold" style={[styles.buttonText, { color: theme.background }]}>
-            Sign up
-          </ThemedText>
-        </Pressable>
-        <Pressable disabled={disabled} onPress={signIn} style={buttonStyle}>
-          <ThemedText type="smallBold" style={[styles.buttonText, { color: theme.background }]}>
-            Sign in
-          </ThemedText>
-        </Pressable>
-        <Pressable disabled={disabled || !userEmail} onPress={signOut} style={buttonStyle}>
-          <ThemedText type="smallBold" style={[styles.buttonText, { color: theme.background }]}>
-            Sign out
-          </ThemedText>
-        </Pressable>
-      </View>
+        <View className="flex-row flex-wrap gap-2">
+          <Button className="min-w-[104px]" disabled={disabled} onPress={signUp} size="sm">
+            <Text>Sign up</Text>
+          </Button>
+          <Button
+            className="min-w-[104px]"
+            disabled={disabled}
+            onPress={signIn}
+            size="sm">
+            <Text>Sign in</Text>
+          </Button>
+          <Button
+            className="min-w-[104px]"
+            disabled={disabled || !userEmail}
+            onPress={signOut}
+            size="sm"
+            variant="outline">
+            <Text>Sign out</Text>
+          </Button>
+        </View>
 
-      <View style={styles.actions}>
-        <Pressable disabled={disabled || !userEmail} onPress={writeRow} style={buttonStyle}>
-          <ThemedText type="smallBold" style={[styles.buttonText, { color: theme.background }]}>
-            Write row
-          </ThemedText>
-        </Pressable>
-        <Pressable disabled={disabled || !userEmail} onPress={refreshRows} style={buttonStyle}>
-          <ThemedText type="smallBold" style={[styles.buttonText, { color: theme.background }]}>
-            Refresh rows
-          </ThemedText>
-        </Pressable>
-      </View>
+        <View className="gap-1">
+          <Text className={error ? 'text-destructive' : undefined} selectable variant="muted">
+            {error ?? status}
+          </Text>
+          {userEmail && (
+            <Text selectable variant="muted">
+              Session: {userEmail}
+            </Text>
+          )}
+        </View>
 
-      <View style={styles.status}>
-        <ThemedText type="small" themeColor={error ? undefined : 'textSecondary'}>
-          {error ?? status}
-        </ThemedText>
-        {userEmail && (
-          <ThemedText type="small" themeColor="textSecondary">
-            Session: {userEmail}
-          </ThemedText>
-        )}
-      </View>
+        <View className="gap-2">
+          {rows.map((row) => (
+            <View className="border-border gap-1 border-t pt-2" key={row.id}>
+              <Text selectable variant="small">
+                {row.label}
+              </Text>
+              <Text selectable variant="code">
+                {new Date(row.created_at).toLocaleString()}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </CardContent>
 
-      <View style={styles.rows}>
-        {rows.map((row) => (
-          <View key={row.id} style={[styles.row, { borderColor: theme.backgroundSelected }]}>
-            <ThemedText type="smallBold">{row.label}</ThemedText>
-            <ThemedText type="code" themeColor="textSecondary">
-              {new Date(row.created_at).toLocaleString()}
-            </ThemedText>
-          </View>
-        ))}
-      </View>
-    </ThemedView>
+      <CardFooter className="flex-wrap gap-2">
+        <Button
+          className="min-w-[104px]"
+          disabled={disabled || !userEmail}
+          onPress={writeRow}
+          size="sm">
+          <Text>Write row</Text>
+        </Button>
+        <Button
+          className="min-w-[104px]"
+          disabled={disabled || !userEmail}
+          onPress={refreshRows}
+          size="sm"
+          variant="outline">
+          <Text>Refresh rows</Text>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }
-
-const styles = StyleSheet.create({
-  panel: {
-    alignSelf: 'stretch',
-    gap: Spacing.three,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.two,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: Spacing.three,
-  },
-  headerText: {
-    flex: 1,
-    gap: Spacing.one,
-  },
-  fields: {
-    gap: Spacing.two,
-  },
-  input: {
-    minHeight: 44,
-    borderWidth: 1,
-    borderRadius: Spacing.two,
-    paddingHorizontal: Spacing.three,
-    fontSize: 16,
-  },
-  actions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.two,
-  },
-  button: {
-    minHeight: 40,
-    minWidth: 104,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: Spacing.two,
-    paddingHorizontal: Spacing.three,
-  },
-  buttonText: {
-    textAlign: 'center',
-  },
-  status: {
-    gap: Spacing.one,
-  },
-  rows: {
-    gap: Spacing.two,
-  },
-  row: {
-    gap: Spacing.one,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    paddingTop: Spacing.two,
-  },
-});
