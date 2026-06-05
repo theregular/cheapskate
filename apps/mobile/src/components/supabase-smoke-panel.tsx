@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,11 +9,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Text } from '@/components/ui/text';
-import { useTheme } from '@/hooks/use-theme';
-import { hasSupabaseEnv, supabase, supabaseUrl } from '@/lib/supabase';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
+import { hasSupabaseEnv, supabase, supabaseUrl } from "@/lib/supabase";
 
 type SmokeTestRow = {
   id: number;
@@ -21,39 +20,44 @@ type SmokeTestRow = {
   created_at: string;
 };
 
-const DEFAULT_EMAIL = 'local-smoke@example.com';
-const DEFAULT_PASSWORD = 'local-smoke-password';
+const DEFAULT_EMAIL = "local-smoke@example.com";
+const DEFAULT_PASSWORD = "local-smoke-password";
 
 export function SupabaseSmokePanel() {
-  const theme = useTheme();
   const [email, setEmail] = useState(DEFAULT_EMAIL);
   const [password, setPassword] = useState(DEFAULT_PASSWORD);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [rows, setRows] = useState<SmokeTestRow[]>([]);
-  const [status, setStatus] = useState('Set Expo Supabase env vars, then sign in.');
+  const [status, setStatus] = useState(
+    "Set Expo Supabase env vars, then sign in.",
+  );
   const [error, setError] = useState<string | null>(null);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
 
   const refreshRows = useCallback(async () => {
     if (!hasSupabaseEnv) {
-      setError('Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY.');
+      setError(
+        "Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+      );
       return;
     }
 
-    setLoadingAction('refresh');
+    setLoadingAction("refresh");
     setError(null);
 
     const { data, error: rowsError } = await supabase
-      .from('smoke_tests')
-      .select('id, label, created_at')
-      .order('created_at', { ascending: false })
+      .from("smoke_tests")
+      .select("id, label, created_at")
+      .order("created_at", { ascending: false })
       .limit(5);
 
     if (rowsError) {
       setError(rowsError.message);
     } else {
       setRows(data ?? []);
-      setStatus(`Loaded ${data?.length ?? 0} row${data?.length === 1 ? '' : 's'}.`);
+      setStatus(
+        `Loaded ${data?.length ?? 0} row${data?.length === 1 ? "" : "s"}.`,
+      );
     }
 
     setLoadingAction(null);
@@ -74,7 +78,7 @@ export function SupabaseSmokePanel() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       const sessionEmail = session?.user.email ?? null;
       setUserEmail(sessionEmail);
-      setStatus(sessionEmail ? `Signed in as ${sessionEmail}.` : 'Signed out.');
+      setStatus(sessionEmail ? `Signed in as ${sessionEmail}.` : "Signed out.");
       if (sessionEmail) {
         refreshRows();
       } else {
@@ -87,11 +91,13 @@ export function SupabaseSmokePanel() {
 
   async function signUp() {
     if (!hasSupabaseEnv) {
-      setError('Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY.');
+      setError(
+        "Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+      );
       return;
     }
 
-    setLoadingAction('sign-up');
+    setLoadingAction("sign-up");
     setError(null);
 
     const { error: signUpError } = await supabase.auth.signUp({
@@ -102,7 +108,7 @@ export function SupabaseSmokePanel() {
     if (signUpError) {
       setError(signUpError.message);
     } else {
-      setStatus('Signed up. If the user already exists, use Sign in.');
+      setStatus("Signed up. If the user already exists, use Sign in.");
     }
 
     setLoadingAction(null);
@@ -110,11 +116,13 @@ export function SupabaseSmokePanel() {
 
   async function signIn() {
     if (!hasSupabaseEnv) {
-      setError('Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY.');
+      setError(
+        "Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+      );
       return;
     }
 
-    setLoadingAction('sign-in');
+    setLoadingAction("sign-in");
     setError(null);
 
     const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -130,7 +138,7 @@ export function SupabaseSmokePanel() {
   }
 
   async function signOut() {
-    setLoadingAction('sign-out');
+    setLoadingAction("sign-out");
     setError(null);
 
     const { error: signOutError } = await supabase.auth.signOut();
@@ -144,15 +152,19 @@ export function SupabaseSmokePanel() {
 
   async function writeRow() {
     if (!hasSupabaseEnv) {
-      setError('Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY.');
+      setError(
+        "Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+      );
       return;
     }
 
-    setLoadingAction('write');
+    setLoadingAction("write");
     setError(null);
 
     const label = `phone smoke ${new Date().toLocaleTimeString()}`;
-    const { error: insertError } = await supabase.from('smoke_tests').insert({ label });
+    const { error: insertError } = await supabase
+      .from("smoke_tests")
+      .insert({ label });
 
     if (insertError) {
       setError(insertError.message);
@@ -172,10 +184,10 @@ export function SupabaseSmokePanel() {
         <View className="flex-1 gap-1">
           <CardTitle>Local Supabase</CardTitle>
           <CardDescription selectable>
-            {hasSupabaseEnv ? supabaseUrl : 'Missing Expo public env vars'}
+            {hasSupabaseEnv ? supabaseUrl : "Missing Expo public env vars"}
           </CardDescription>
         </View>
-        {loadingAction && <ActivityIndicator color={theme.text} />}
+        {loadingAction && <ActivityIndicator />}
       </CardHeader>
 
       <CardContent className="gap-4">
@@ -202,14 +214,20 @@ export function SupabaseSmokePanel() {
         </View>
 
         <View className="flex-row flex-wrap gap-2">
-          <Button className="min-w-[104px]" disabled={disabled} onPress={signUp} size="sm">
+          <Button
+            className="min-w-[104px]"
+            disabled={disabled}
+            onPress={signUp}
+            size="sm"
+          >
             <Text>Sign up</Text>
           </Button>
           <Button
             className="min-w-[104px]"
             disabled={disabled}
             onPress={signIn}
-            size="sm">
+            size="sm"
+          >
             <Text>Sign in</Text>
           </Button>
           <Button
@@ -217,13 +235,18 @@ export function SupabaseSmokePanel() {
             disabled={disabled || !userEmail}
             onPress={signOut}
             size="sm"
-            variant="outline">
+            variant="outline"
+          >
             <Text>Sign out</Text>
           </Button>
         </View>
 
         <View className="gap-1">
-          <Text className={error ? 'text-destructive' : undefined} selectable variant="muted">
+          <Text
+            className={error ? "text-destructive" : undefined}
+            selectable
+            variant="muted"
+          >
             {error ?? status}
           </Text>
           {userEmail && (
@@ -252,7 +275,8 @@ export function SupabaseSmokePanel() {
           className="min-w-[104px]"
           disabled={disabled || !userEmail}
           onPress={writeRow}
-          size="sm">
+          size="sm"
+        >
           <Text>Write row</Text>
         </Button>
         <Button
@@ -260,7 +284,8 @@ export function SupabaseSmokePanel() {
           disabled={disabled || !userEmail}
           onPress={refreshRows}
           size="sm"
-          variant="outline">
+          variant="outline"
+        >
           <Text>Refresh rows</Text>
         </Button>
       </CardFooter>
