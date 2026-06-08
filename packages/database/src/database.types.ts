@@ -9,6 +9,60 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      products: {
+        Row: {
+          brand: string | null
+          created_at: string
+          created_by: string
+          gtin: string
+          id: string
+          name: string
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          brand?: string | null
+          created_at?: string
+          created_by?: string
+          gtin: string
+          id?: string
+          name: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Update: {
+          brand?: string | null
+          created_at?: string
+          created_by?: string
+          gtin?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          id: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          username?: string
+        }
+        Relationships: []
+      }
       smoke_tests: {
         Row: {
           created_at: string
@@ -168,3 +222,4 @@ export const Constants = {
     Enums: {},
   },
 } as const
+

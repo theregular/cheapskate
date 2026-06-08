@@ -103,6 +103,12 @@ export function SupabaseSmokePanel() {
     const { error: signUpError } = await supabase.auth.signUp({
       email: email.trim(),
       password,
+      options: {
+        data: {
+          username: "local_smoke",
+          display_name: "Local Smoke",
+        },
+      },
     });
 
     if (signUpError) {
